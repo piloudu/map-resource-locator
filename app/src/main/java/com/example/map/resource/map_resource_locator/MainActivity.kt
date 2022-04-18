@@ -1,5 +1,6 @@
 package com.example.map.resource.map_resource_locator
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -15,6 +16,7 @@ import com.example.map.resource.map_resource_locator.ui.theme.Map_resource_locat
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        appContext = applicationContext
         setContent {
             Map_resource_locatorTheme {
                 // A surface container using the 'background' color from the theme
@@ -26,6 +28,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+    companion object {
+        private lateinit var appContext: Context
+        fun getContext(): Context = appContext
     }
 }
 
