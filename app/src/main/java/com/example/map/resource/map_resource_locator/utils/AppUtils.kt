@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 
+const val APP_NAME = "Map Resource Locator"
+
 val mapper: ObjectMapper = jacksonObjectMapper().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
 inline fun <reified T> String.deserialize(): List<T> = mapper.readValue(
     this,
