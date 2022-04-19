@@ -1,6 +1,8 @@
 package com.example.map.resource.map_resource_locator.view_model
 
 import androidx.lifecycle.viewModelScope
+import com.example.map.resource.map_resource_locator.get_data.Cache
+import com.example.map.resource.map_resource_locator.get_data.CacheData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -47,16 +49,18 @@ sealed class MainActivityUserIntent : UserIntent {
     object Login : MainActivityUserIntent()
 
     suspend fun setStateCache() {
-        //TODO
+        MainViewModelInstance.state.value.cache = Cache.get()
     }
 }
 
 data class MainActivityState(
     val innerState: AppState,
+    var cache: CacheData
 ) : UiState {
     companion object {
         fun initial() = MainActivityState(
             innerState = AppState.LOGIN,
+            cache = CacheData()
         )
     }
 }
