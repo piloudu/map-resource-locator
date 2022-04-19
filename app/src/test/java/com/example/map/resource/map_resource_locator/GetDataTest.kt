@@ -1,6 +1,9 @@
 package com.example.map.resource.map_resource_locator
 
-import okhttp3.OkHttpClient
+import com.example.map.resource.map_resource_locator.data_model.Resource
+import com.example.map.resource.map_resource_locator.get_data.HttpUrls
+import com.example.map.resource.map_resource_locator.get_data.RestCall
+import com.example.map.resource.map_resource_locator.utils.deserialize
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -13,8 +16,8 @@ class GetDataTest {
         @DisplayName("is the 473 data retrieved")
         @Test
         fun `is the 473 companyZoneId data retrieved`() {
-            val client = OkHttpClient()
-            val data = client.newBuilder().
+            val data: List<Resource> = mock473CompanyZoneId.deserialize()
+            println(data[0])
         }
     }
 }
