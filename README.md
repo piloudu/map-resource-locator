@@ -19,8 +19,8 @@ if (! gradle --version 2> /dev/null); then brew install gradle; fi
 Once gradle is installed, do one of the following:
 * If you haven't cloned this repository already:
 ```Bash
-git clone git@github.com:piloudu/sample-sales-app.git
-cd sample-sales-app
+git clone git@github.com:piloudu/map-resource-locator.git
+cd map-resource-locator
 gradle build
 ```
 
