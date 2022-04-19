@@ -1,5 +1,6 @@
 package com.example.map.resource.map_resource_locator
 
+import com.example.map.resource.map_resource_locator.data_model.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -30,3 +31,20 @@ val mock412CompanyZoneId = """
     "bikesAvailable":6
     }
 """.trimIndent()
+
+val expectedObjectFor473CompanyZoneId = Resource(
+    id = "PT-LIS-A00445",
+    name = "03ZB35",
+    x = -9.145625,
+    y = 38.71125,
+    licencePlate = "03ZB35",
+    companyZoneId = 473,
+    model = "Askoll",
+    resourceImageId = "vehicle_gen_ecooltra",
+    resourceType = "MOPED",
+    resourcesImagesUrls = listOf("vehicle_gen_ecooltra"),
+    range = 27,
+    batteryLevel = 36,
+    helmets = 2,
+    realTimeData = true
+)
