@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -11,6 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -22,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.map.resource.map_resource_locator.ui.theme.Purple200
 import com.example.map.resource.map_resource_locator.utils.APP_NAME
 import com.example.map.resource.map_resource_locator.view_model.MainActivityUserIntent
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
@@ -38,11 +44,7 @@ enum class LoginScreenMessages(val message: String) {
 @Composable
 fun LoginScreen(modifier: Modifier) {
     LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
-    Box(modifier = modifier
-        .testTag(LoginScreenTags.LOGIN_SCREEN.name)
-        .clickable {
-            MainViewModelInstance.sendIntent(MainActivityUserIntent.Login)
-        }) {
+    Box(modifier = modifier.getLoginScreenModifier()) {
         Column(
             modifier.fillMaxHeight(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -75,6 +77,39 @@ fun LoginScreen(modifier: Modifier) {
         }
     }
 }
+
+/**
+ * Used to block the landscape view in the LoginScreen
+ */
+@Composable
+fun LockScreenOrientation(orientation: Int) {
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        val activity = context.findActivity() ?: return@DisposableEffect onDispose {}
+        val originalOrientation = activity.requestedOrientation
+        activity.requestedOrientation = orientation
+        onDispose {
+            // restore original orientation when view disappears
+            activity.requestedOrientation = originalOrientation
+        }
+    }
+}
+
+val gradient = Brush.radialGradient(
+    colors = listOf(Color.Blue, Purple200),
+    center = Offset.Infinite,
+    radius = 2700f
+)
+
+private fun Modifier.getLoginScreenModifier() = this
+    .testTag(LoginScreenTags.LOGIN_SCREEN.name)
+    .fillMaxSize()
+    .background(
+        brush = gradient
+    )
+    .clickable {
+        MainViewModelInstance.sendIntent(MainActivityUserIntent.Login)
+    }
 
 @Composable
 fun LoginScreenText(
@@ -157,23 +192,6 @@ fun ArrowsShape() {
             ArrowEmoji(text = "↙️")
             ArrowEmoji(text = "⬇️")
             ArrowEmoji(text = "↘️")
-        }
-    }
-}
-
-/**
- * Used to block the landscape view in the LoginScreen
- */
-@Composable
-fun LockScreenOrientation(orientation: Int) {
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context.findActivity() ?: return@DisposableEffect onDispose {}
-        val originalOrientation = activity.requestedOrientation
-        activity.requestedOrientation = orientation
-        onDispose {
-            // restore original orientation when view disappears
-            activity.requestedOrientation = originalOrientation
         }
     }
 }
