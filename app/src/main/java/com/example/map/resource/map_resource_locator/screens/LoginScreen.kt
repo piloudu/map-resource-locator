@@ -3,19 +3,16 @@ package com.example.map.resource.map_resource_locator.screens
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.pm.ActivityInfo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -41,7 +38,6 @@ enum class LoginScreenMessages(val message: String) {
 
 @Composable
 fun LoginScreen(modifier: Modifier) {
-    LockScreenOrientation(orientation = ActivityInfo.SCREEN_ORIENTATION_LOCKED)
     Box(modifier = modifier.getLoginScreenModifier()) {
         Column(
             modifier.fillMaxHeight(),
@@ -72,23 +68,6 @@ fun LoginScreen(modifier: Modifier) {
                     .weight(5f)
             )
             Spacer(Modifier.height(72.dp))
-        }
-    }
-}
-
-/**
- * Used to block the landscape view in the LoginScreen
- */
-@Composable
-fun LockScreenOrientation(orientation: Int) {
-    val context = LocalContext.current
-    DisposableEffect(Unit) {
-        val activity = context.findActivity() ?: return@DisposableEffect onDispose {}
-        val originalOrientation = activity.requestedOrientation
-        activity.requestedOrientation = orientation
-        onDispose {
-            // restore original orientation when view disappears
-            activity.requestedOrientation = originalOrientation
         }
     }
 }
@@ -192,12 +171,6 @@ fun ArrowsShape() {
             ArrowEmoji(text = "↘️")
         }
     }
-}
-
-private fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4_XL)
