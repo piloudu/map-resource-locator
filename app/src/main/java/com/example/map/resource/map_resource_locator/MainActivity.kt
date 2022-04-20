@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import com.example.map.resource.map_resource_locator.ui.theme.MapResourceLocator
+import com.example.map.resource.map_resource_locator.ui.theme.MapResourceLocatorTheme
 import com.example.map.resource.map_resource_locator.screens.MainActivityScreen
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         appContext = applicationContext
         super.onCreate(savedInstanceState)
         setContent {
-            MapResourceLocator() {
+            MapResourceLocatorTheme {
                 Surface(color = MaterialTheme.colors.background) {
                     MainActivityScreen()
                 }
