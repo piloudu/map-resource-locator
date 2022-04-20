@@ -17,7 +17,7 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
     override val state: StateFlow<MainActivityState> = reducer.state
 
     fun sendIntent(userIntent: MainActivityUserIntent) {
-        viewModelScope.launch(Dispatchers.Main) {
+        viewModelScope.launch(Dispatchers.Default) {
             userIntent.setStateCache()
             userIntent.action()
         }

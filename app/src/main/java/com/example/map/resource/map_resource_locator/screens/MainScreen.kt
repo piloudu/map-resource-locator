@@ -13,6 +13,11 @@ import androidx.compose.ui.unit.sp
 import com.example.map.resource.map_resource_locator.ui.theme.Purple700
 import com.example.map.resource.map_resource_locator.utils.APP_NAME
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 
 enum class MainScreenTags {
     TOPBAR, MAP
@@ -22,6 +27,11 @@ enum class MainScreenMessages(val message: String) {
     HEADER(APP_NAME)
 }
 
+val cameraPosition = CameraPosition.fromLatLngZoom(
+    LatLng(38.736946, -9.142685),
+    18f
+)
+
 @Composable
 fun MainScreen(modifier: Modifier) {
     Column(modifier.fillMaxSize()) {
@@ -30,6 +40,7 @@ fun MainScreen(modifier: Modifier) {
                 .testTag(MainScreenTags.TOPBAR.name)
                 .height(32.dp)
         )
+        MainScreenMap(cameraPosition = cameraPosition)
     }
 }
 
@@ -54,5 +65,15 @@ fun MainScreenMap(
     cameraPosition: CameraPosition,
     modifier: Modifier = Modifier
 ) {
-    TODO("Not yet implemented")
+    val cameraPositionState = rememberCameraPositionState { position = cameraPosition }
+    GoogleMap(
+        modifier = modifier.fillMaxSize(),
+        cameraPositionState = cameraPositionState
+    ) {
+        Marker(
+            state = MarkerState(position = LatLng(38.736946, -9.142685)),
+            title = "Lisbon",
+            snippet = "Marker in Lisbon"
+        )
+    }
 }
