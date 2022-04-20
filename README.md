@@ -1,5 +1,7 @@
 # Brief Introduction
-This is a simple Android application that aims at downloading data about sale bundles using API REST calls and show the user the total money to pay in different currencies.
+This is a simple Android application that aims at downloading data about sites of interest using
+API REST calls and show them to the user as markers in a map with embedded information that can be
+displayed when clicking this markers.
 
 ### Getting started
 This code needs to be executed on an Android device or an Android emulator.
