@@ -28,13 +28,16 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
         Reducer<MainActivityState, MainActivityUserIntent>(initialState) {
         override fun reduce(oldState: MainActivityState, userIntent: MainActivityUserIntent) {
             when (userIntent) {
-                is MainActivityUserIntent.Login -> {
-                    setState(
-                        oldState.copy(
-                            innerState = AppState.MAIN
-                        )
+                is MainActivityUserIntent.Login -> setState(
+                    oldState.copy(
+                        innerState = AppState.MAIN
                     )
-                }
+                )
+                is MainActivityUserIntent.SelectMarker -> setState(
+                    oldState.copy(
+                        selectedMarker = userIntent.markerId
+                    )
+                )
             }
         }
     }
@@ -47,6 +50,7 @@ object MainViewModelInstance : MainViewModel()
 
 sealed class MainActivityUserIntent : UserIntent {
     object Login : MainActivityUserIntent()
+    class SelectMarker(val markerId: String) : MainActivityUserIntent()
 
     suspend fun setStateCache() {
         MainViewModelInstance.state.value.cache = Cache.get()
@@ -55,12 +59,14 @@ sealed class MainActivityUserIntent : UserIntent {
 
 data class MainActivityState(
     val innerState: AppState,
-    var cache: CacheData
+    var cache: CacheData,
+    val selectedMarker: String
 ) : UiState {
     companion object {
         fun initial() = MainActivityState(
             innerState = AppState.LOGIN,
-            cache = CacheData()
+            cache = CacheData(),
+            selectedMarker = ""
         )
     }
 }
