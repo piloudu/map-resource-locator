@@ -1,13 +1,11 @@
 package com.example.map.resource.map_resource_locator.view_model
 
-import androidx.lifecycle.viewModelScope
 import com.example.map.resource.map_resource_locator.get_data.Cache
 import com.example.map.resource.map_resource_locator.get_data.CacheData
 import com.example.map.resource.map_resource_locator.utils.toastMessage
+import com.example.map.resource.map_resource_locator.utils.withViewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /**
  * MainViewModel is not made a singleton in order for tests to be able to instance a new object
@@ -19,21 +17,20 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
     override val state: StateFlow<MainActivityState> = reducer.state
 
     fun sendIntent(userIntent: MainActivityUserIntent) {
-        viewModelScope.launch(Dispatchers.Default) {
+        withViewModelScope(Dispatchers.Default) {
             setStateCache()
             userIntent.action()
         }
         reducer.sendIntent(userIntent)
     }
 
-    private suspend fun setStateCache() {
+    private fun setStateCache() {
         val oldCache = MainViewModelInstance.state.value.cache
-        MainViewModelInstance.state.value.cache = Cache.get()
-        if (oldCache != MainViewModelInstance.state.value.cache)
-            viewModelScope.launch(Dispatchers.Main) {
+        withViewModelScope {
+            MainViewModelInstance.state.value.cache = Cache.get()
+            if (oldCache != MainViewModelInstance.state.value.cache)
                 toastMessage("Data cached")
-            }.invokeOnCompletion { sendIntent(MainActivityUserIntent.Logged) }
-        println("Cache: " + MainViewModelInstance.state.value.cache)
+        }.invokeOnCompletion { sendIntent(MainActivityUserIntent.Logged) }
     }
 
     private class MainReducer(initialState: MainActivityState) :
