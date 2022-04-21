@@ -1,5 +1,6 @@
 package com.example.map.resource.map_resource_locator.view_model
 
+import com.example.map.resource.map_resource_locator.data_model.Resource
 import com.example.map.resource.map_resource_locator.get_data.Cache
 import com.example.map.resource.map_resource_locator.get_data.CacheData
 import com.example.map.resource.map_resource_locator.utils.toastMessage
@@ -49,7 +50,7 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
                 )
                 is MainActivityUserIntent.SelectMarker -> setState(
                     oldState.copy(
-                        selectedMarker = userIntent.markerId
+                        selectedResource = userIntent.resource
                     )
                 )
             }
@@ -65,19 +66,20 @@ object MainViewModelInstance : MainViewModel()
 sealed class MainActivityUserIntent : UserIntent {
     object Login : MainActivityUserIntent()
     object Logged : MainActivityUserIntent()
-    class SelectMarker(val markerId: String) : MainActivityUserIntent()
+    object Dismiss : MainActivityUserIntent()
+    class SelectMarker(val resource: Resource) : MainActivityUserIntent()
 }
 
 data class MainActivityState(
     val innerState: AppState,
     var cache: CacheData,
-    val selectedMarker: String
+    val selectedResource: Resource?
 ) : UiState {
     companion object {
         fun initial() = MainActivityState(
             innerState = AppState.LOGIN,
             cache = CacheData(),
-            selectedMarker = ""
+            selectedResource = null
         )
     }
 }

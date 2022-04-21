@@ -115,7 +115,7 @@ fun MapMarker(
     newCameraPosition: () -> Boolean
 ) {
     val state: MainActivityState by MainViewModelInstance.state.collectAsState()
-    val isSelected = state.selectedMarker == resource.id
+    val isSelected = state.selectedResource == resource.id
     Marker(
         state = MarkerState(
             position = position

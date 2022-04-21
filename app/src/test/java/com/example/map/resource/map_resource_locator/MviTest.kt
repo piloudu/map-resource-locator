@@ -1,5 +1,6 @@
 package com.example.map.resource.map_resource_locator
 
+import com.example.map.resource.map_resource_locator.utils.mockResource
 import com.example.map.resource.map_resource_locator.view_model.AppState.*
 import com.example.map.resource.map_resource_locator.view_model.MainActivityUserIntent
 import com.example.map.resource.map_resource_locator.view_model.MainViewModel
@@ -43,9 +44,9 @@ class MviTest {
     @Test
     fun `the inner state is changed properly when selecting a marker in map`() {
         withTestScope {
-            mainViewModelTestInstance.sendIntent(MainActivityUserIntent.SelectMarker("222"))
+            mainViewModelTestInstance.sendIntent(MainActivityUserIntent.SelectMarker(mockResource))
             val state = mainViewModelTestInstance.state.value
-            val expectedState = state.copy(selectedMarker = "222")
+            val expectedState = state.copy(selectedResource = mockResource)
             state shouldBe expectedState
         }
     }

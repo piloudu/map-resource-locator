@@ -73,3 +73,23 @@ fun bitmapDescriptorFromVector(
     drawable.draw(canvas)
     return BitmapDescriptorFactory.fromBitmap(bm)
 }
+
+val mockResource = Resource(
+    companyZoneId = 473,
+    range = 3,
+    batteryLevel = 6,
+    helmets = 2,
+    availableResources = 0,
+    spacesAvailable = 0,
+    bikesAvailable = 2,
+    id = "mockId",
+    name = "mockName",
+    licencePlate = "mockLicensePlate",
+    resourceType = "mockResourceType",
+    model = "mockModel",
+    resourceImageId = "mockResImg",
+    resourcesImagesUrls = listOf("mockResUrl"),
+    allowDropOff = true,
+    realTimeData = true,
+    station = false
+)
