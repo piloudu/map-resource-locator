@@ -3,21 +3,14 @@ package com.example.map.resource.map_resource_locator.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import com.example.map.resource.map_resource_locator.screens.MainScreen
-import com.example.map.resource.map_resource_locator.screens.MainScreenMap
 import com.example.map.resource.map_resource_locator.screens.MainScreenTags
 import com.example.map.resource.map_resource_locator.ui.theme.MapResourceLocatorTheme
-import com.example.map.resource.map_resource_locator.utils.defaultCameraZoom
-import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
-import com.example.map.resource.map_resource_locator.utils.lisbonLatLng
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import org.junit.Rule
 import org.junit.jupiter.api.DisplayName
 import org.junit.Test
@@ -57,16 +50,5 @@ class MainScreenTest {
                 .onNodeWithTag(MainScreenTags.MAP.name, true)
                 .assertIsDisplayed()
         }
-    }
-
-    @DisplayName("The Map displays the expected marker")
-    @Test
-    fun map_displays_the_expected_marker() {
-        val expectedMarkerId = "PT-LIS-A00218"
-        val cameraPosition = initialCameraPosition
-        composeTestRule.setContent {
-            MainScreenMap(cameraPosition = cameraPosition)
-        }
-        composeTestRule.onNodeWithTag(expectedMarkerId).assertIsDisplayed()
     }
 }

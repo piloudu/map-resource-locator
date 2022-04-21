@@ -84,8 +84,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'org.junit.jupiter:junit-jupiter:5.7.2'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$compose_version"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.2.0-alpha08"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-test-junit:$testing_version"
     androidTestImplementation 'io.kotest:kotest-runner-junit5:5.2.3'
     androidTestImplementation 'junit:junit:4.13.2'
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
