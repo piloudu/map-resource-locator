@@ -159,13 +159,22 @@ fun focusMarker(
 @Composable
 fun LoadingIndicator(
     modifier: Modifier = Modifier,
-    size: Int = 80,
     color: Color = Purple700
 ) {
-    CircularProgressIndicator(
-        modifier = Modifier
-            .height(size.dp)
-            .width(size.dp),
-        color = color
-    )
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+
+    Column(
+        modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.height(screenHeight / 3))
+        CircularProgressIndicator(
+            modifier = Modifier
+                .width(screenWidth / 2)
+                .height(screenHeight / 3),
+            color = color
+        )
+        Spacer(Modifier.height(screenHeight / 3))
+    }
 }
