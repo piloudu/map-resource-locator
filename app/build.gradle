@@ -37,8 +37,9 @@ android {
         compose true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
-        kotlinCompilerVersion '1.6.10'
+        //kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion = compose_version
+        //kotlinCompilerVersion '1.6.10'
     }
     packagingOptions {
         resources {
@@ -73,6 +74,11 @@ dependencies {
     // Google Maps
     implementation  "com.google.maps.android:maps-compose:2.1.0"
     implementation 'com.google.android.gms:play-services-maps:18.0.2'
+    // Compose runtime
+    implementation "androidx.compose.runtime:runtime:$compose_version"
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
+    implementation "androidx.compose.runtime:runtime-rxjava2:$compose_version"
+    // Compose animation
 
 
     testImplementation 'io.kotest:kotest-runner-junit5:5.2.3'
