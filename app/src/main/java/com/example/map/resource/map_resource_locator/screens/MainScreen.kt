@@ -109,7 +109,10 @@ fun MainScreenMap(
                     resource = it,
                     iconResId = it.iconResId(),
                     newCameraPosition = {
-                        cameraPositionState.position = focusMarker(position)
+                        cameraPositionState.position = focusMarker(
+                            cameraPositionState.position.zoom,
+                            position
+                        )
                         true
                     }
                 )
@@ -141,7 +144,17 @@ fun MapMarker(
     )
 }
 
-fun focusMarker(position: LatLng): CameraPosition = CameraPosition.fromLatLngZoom(position, 18f)
+fun focusMarker(
+    currentCameraZoom: Float,
+    position: LatLng
+): CameraPosition {
+    val newCameraZoom = when {
+        currentCameraZoom < 14f -> 15f
+        currentCameraZoom >= 15f -> currentCameraZoom
+        else -> currentCameraZoom + 1
+    }
+    return CameraPosition.fromLatLngZoom(position, newCameraZoom)
+}
 
 @Composable
 fun LoadingIndicator(
