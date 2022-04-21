@@ -1,5 +1,7 @@
 package com.example.map.resource.map_resource_locator.screens
 
+import android.content.Context
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
@@ -13,12 +15,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.map.resource.map_resource_locator.MainActivity
 import com.example.map.resource.map_resource_locator.data_model.Resource
 import com.example.map.resource.map_resource_locator.ui.theme.Purple700
-import com.example.map.resource.map_resource_locator.utils.APP_NAME
-import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
+import com.example.map.resource.map_resource_locator.utils.*
 import com.example.map.resource.map_resource_locator.view_model.AppState.*
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
+import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -81,19 +84,37 @@ fun MainScreenMap(
         modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
-        if (resources.isNotEmpty()) {
-            Marker(
-                state = MarkerState(
-                    position = LatLng(
-                        resources[0].yPosition!!,
-                        resources[0].xPosition!!
-                    )
-                ),
-                title = "Lisbon",
-                snippet = "Marker in Lisbon"
-            )
+        resources.takeIf { it.isNotEmpty() }?.forEach {
+            if (it.hasLatLng()) {
+                val position = LatLng(
+                    it.yPosition!!,
+                    it.xPosition!!
+                )
+                MapMarker(
+                    context = MainActivity.getContext(),
+                    position = position,
+                    resource = it,
+                    iconResId = it.iconResId()
+                )
+            }
         }
     }
+}
+
+@Composable
+fun MapMarker(
+    context: Context,
+    position: LatLng,
+    resource: Resource,
+    @DrawableRes iconResId: Int
+) {
+    Marker(
+        state = MarkerState(
+            position = position
+        ),
+        title = resource.name ?: "",
+        icon = bitmapDescriptorFromVector(context, iconResId)
+    )
 }
 
 @Composable
@@ -108,10 +129,4 @@ fun LoadingIndicator(
             .width(size.dp),
         color = color
     )
-}
-
-@Preview
-@Composable
-fun MainScreenPreview() {
-    MainScreen()
 }

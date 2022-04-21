@@ -12,6 +12,10 @@
         <entry key="../../../../../../layout/compose-model-1650483189448.xml" value="0.1" />
         <entry key="../../../../../../layout/compose-model-1650487623191.xml" value="0.2030638852672751" />
         <entry key="../../../../../../layout/compose-model-1650524574447.xml" value="0.10625814863102999" />
+        <entry key="app/src/main/res/drawable/ic_baseline_directions_car_24.xml" value="0.1355" />
+        <entry key="app/src/main/res/drawable/ic_baseline_pedal_bike_24.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_bike_marker.xml" value="0.217" />
+        <entry key="app/src/main/res/drawable/ic_car_marker.xml" value="0.217" />
       </map>
     </option>
   </component>
