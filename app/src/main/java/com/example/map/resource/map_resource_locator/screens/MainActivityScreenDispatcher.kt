@@ -8,7 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.example.map.resource.map_resource_locator.view_model.AppState
+import com.example.map.resource.map_resource_locator.view_model.AppState.*
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
 
 val modifier = Modifier
@@ -24,8 +24,8 @@ fun MainActivityScreen(
         modifier = modifier
     ) {
         when (state.innerState) {
-            AppState.LOGIN -> LoginScreen(modifier)
-            AppState.MAIN -> MainScreen(modifier)
+            LOGIN -> LoginScreen(modifier)
+            MAIN -> MainScreen(modifier)
         }
     }
 }

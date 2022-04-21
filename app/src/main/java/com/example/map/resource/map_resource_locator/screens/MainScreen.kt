@@ -1,14 +1,16 @@
 package com.example.map.resource.map_resource_locator.screens
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.map.resource.map_resource_locator.data_model.Resource
@@ -16,8 +18,6 @@ import com.example.map.resource.map_resource_locator.get_data.Cache
 import com.example.map.resource.map_resource_locator.ui.theme.Purple700
 import com.example.map.resource.map_resource_locator.utils.APP_NAME
 import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
-import com.example.map.resource.map_resource_locator.utils.lisbonLatLng
-import com.example.map.resource.map_resource_locator.view_model.MainActivityState
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -25,7 +25,7 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 enum class MainScreenTags {
     TOPBAR, MAP
@@ -36,19 +36,28 @@ enum class MainScreenMessages(val message: String) {
 }
 
 @Composable
-fun MainScreen(modifier: Modifier) {
+fun MainScreen(modifier: Modifier = Modifier) {
     val state by MainViewModelInstance.state.collectAsState()
-    val resources: List<Resource> by remember { mutableStateOf(state.cache.resources) }
+
+    /*
+     This should never exist in a UI element!!! I couldn't manage to find a way for a Composable
+     to subscribe to the changes made in state.cache after that coroutine ends.
+     */
+    runBlocking {
+        state.cache = Cache.get()
+    }
+
     Column(modifier.fillMaxSize()) {
         TopBar(
             modifier = Modifier
                 .testTag(MainScreenTags.TOPBAR.name)
                 .height(32.dp)
         )
-        MainScreenMap(
-            cameraPosition = initialCameraPosition,
-            resources = resources
-        )
+        if (state.cache.resources.isNotEmpty())
+            MainScreenMap(
+                cameraPosition = initialCameraPosition,
+                resources = state.cache.resources
+            )
     }
 }
 
@@ -70,16 +79,16 @@ fun TopBar(modifier: Modifier) {
 
 @Composable
 fun MainScreenMap(
+    modifier: Modifier = Modifier,
     cameraPosition: CameraPosition,
-    resources: List<Resource>,
-    modifier: Modifier = Modifier
+    resources: List<Resource>
 ) {
     val cameraPositionState = rememberCameraPositionState { position = cameraPosition }
     GoogleMap(
         modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
-        if (resources.isNotEmpty())
+        if (resources.isNotEmpty()) {
             Marker(
                 state = MarkerState(
                     position = LatLng(
@@ -90,5 +99,12 @@ fun MainScreenMap(
                 title = "Lisbon",
                 snippet = "Marker in Lisbon"
             )
+        }
     }
+}
+
+@Preview
+@Composable
+fun MainScreenPreview() {
+    MainScreen()
 }
