@@ -61,7 +61,7 @@ fun MainScreen(modifier: Modifier = Modifier) {
     }
     Column(Modifier.fillMaxHeight()) {
         selectedResource?.let {
-            Spacer(modifier = Modifier.height((screenHeight * 3) / 4))
+            Spacer(modifier = Modifier.height((screenHeight * 4) / 7))
             PopupInfo(
                 resource = it
             )
@@ -149,8 +149,8 @@ fun focusMarker(
     position: LatLng
 ): CameraPosition {
     val newCameraZoom = when {
-        currentCameraZoom < 14f -> 15f
-        currentCameraZoom >= 15f -> currentCameraZoom
+        currentCameraZoom < 13f -> 14f
+        currentCameraZoom >= 14f -> currentCameraZoom
         else -> currentCameraZoom + 1
     }
     return CameraPosition.fromLatLngZoom(position, newCameraZoom)
