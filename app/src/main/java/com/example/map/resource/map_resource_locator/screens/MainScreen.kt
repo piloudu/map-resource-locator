@@ -95,7 +95,8 @@ fun MainScreenMap(
     val cameraPositionState = rememberCameraPositionState { position = cameraPosition }
     GoogleMap(
         modifier = modifier.fillMaxSize(),
-        cameraPositionState = cameraPositionState
+        cameraPositionState = cameraPositionState,
+        onMapClick = { MainViewModelInstance.sendIntent(MainActivityUserIntent.Dismiss) }
     ) {
         resources.takeIf { it.isNotEmpty() }?.forEach {
             if (it.hasLatLng()) {

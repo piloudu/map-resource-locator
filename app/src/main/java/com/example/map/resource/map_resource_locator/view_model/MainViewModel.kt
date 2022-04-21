@@ -53,6 +53,11 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
                         selectedResource = userIntent.resource
                     )
                 )
+                is MainActivityUserIntent.Dismiss -> setState(
+                    oldState.copy(
+                        selectedResource = null
+                    )
+                )
             }
         }
     }
