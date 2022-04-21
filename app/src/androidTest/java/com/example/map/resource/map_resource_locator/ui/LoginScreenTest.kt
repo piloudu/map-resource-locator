@@ -12,8 +12,8 @@ import com.example.map.resource.map_resource_locator.screens.LoginScreen
 import com.example.map.resource.map_resource_locator.screens.LoginScreenTags
 import com.example.map.resource.map_resource_locator.ui.theme.MapResourceLocatorTheme
 import org.junit.Rule
-import org.junit.jupiter.api.DisplayName
 import org.junit.Test
+import org.junit.jupiter.api.DisplayName
 
 @DisplayName("LoginScreen")
 class LoginScreenTest {

@@ -12,8 +12,8 @@ import com.example.map.resource.map_resource_locator.screens.MainScreen
 import com.example.map.resource.map_resource_locator.screens.MainScreenTags
 import com.example.map.resource.map_resource_locator.ui.theme.MapResourceLocatorTheme
 import org.junit.Rule
-import org.junit.jupiter.api.DisplayName
 import org.junit.Test
+import org.junit.jupiter.api.DisplayName
 
 class MainScreenTest {
     @get:Rule
