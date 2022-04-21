@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -12,6 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.map.resource.map_resource_locator.ui.theme.Purple700
 import com.example.map.resource.map_resource_locator.utils.APP_NAME
+import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
+import com.example.map.resource.map_resource_locator.utils.lisbonLatLng
+import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -27,11 +31,6 @@ enum class MainScreenMessages(val message: String) {
     HEADER(APP_NAME)
 }
 
-val cameraPosition = CameraPosition.fromLatLngZoom(
-    LatLng(38.736946, -9.142685),
-    18f
-)
-
 @Composable
 fun MainScreen(modifier: Modifier) {
     Column(modifier.fillMaxSize()) {
@@ -40,7 +39,7 @@ fun MainScreen(modifier: Modifier) {
                 .testTag(MainScreenTags.TOPBAR.name)
                 .height(32.dp)
         )
-        MainScreenMap(cameraPosition = cameraPosition)
+        MainScreenMap(cameraPosition = initialCameraPosition)
     }
 }
 
@@ -66,12 +65,14 @@ fun MainScreenMap(
     modifier: Modifier = Modifier
 ) {
     val cameraPositionState = rememberCameraPositionState { position = cameraPosition }
+    val appState = MainViewModelInstance.state.collectAsState()
     GoogleMap(
         modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
+        //if (appState.value.cache.resources.isNotEmpty())
         Marker(
-            state = MarkerState(position = LatLng(38.736946, -9.142685)),
+            state = MarkerState(position = lisbonLatLng),
             title = "Lisbon",
             snippet = "Marker in Lisbon"
         )

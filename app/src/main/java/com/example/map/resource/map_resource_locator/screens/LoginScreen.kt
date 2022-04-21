@@ -1,8 +1,5 @@
 package com.example.map.resource.map_resource_locator.screens
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*

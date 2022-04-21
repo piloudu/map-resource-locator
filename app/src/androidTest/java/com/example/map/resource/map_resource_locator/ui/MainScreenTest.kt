@@ -13,6 +13,9 @@ import com.example.map.resource.map_resource_locator.screens.MainScreen
 import com.example.map.resource.map_resource_locator.screens.MainScreenMap
 import com.example.map.resource.map_resource_locator.screens.MainScreenTags
 import com.example.map.resource.map_resource_locator.ui.theme.MapResourceLocatorTheme
+import com.example.map.resource.map_resource_locator.utils.defaultCameraZoom
+import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
+import com.example.map.resource.map_resource_locator.utils.lisbonLatLng
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import org.junit.Rule
@@ -60,10 +63,7 @@ class MainScreenTest {
     @Test
     fun map_displays_the_expected_marker() {
         val expectedMarkerId = "PT-LIS-A00218"
-        val cameraPosition = CameraPosition.fromLatLngZoom(
-            LatLng(38.736946, -9.142685),
-            18f
-        )
+        val cameraPosition = initialCameraPosition
         composeTestRule.setContent {
             MainScreenMap(cameraPosition = cameraPosition)
         }

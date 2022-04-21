@@ -3,6 +3,7 @@ package com.example.map.resource.map_resource_locator.view_model
 import androidx.lifecycle.viewModelScope
 import com.example.map.resource.map_resource_locator.get_data.Cache
 import com.example.map.resource.map_resource_locator.get_data.CacheData
+import com.example.map.resource.map_resource_locator.utils.toastMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -17,7 +18,7 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
     override val state: StateFlow<MainActivityState> = reducer.state
 
     fun sendIntent(userIntent: MainActivityUserIntent) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.Main) {
             userIntent.setStateCache()
             userIntent.action()
         }
@@ -53,7 +54,10 @@ sealed class MainActivityUserIntent : UserIntent {
     class SelectMarker(val markerId: String) : MainActivityUserIntent()
 
     suspend fun setStateCache() {
+        val oldCache = MainViewModelInstance.state.value.cache
         MainViewModelInstance.state.value.cache = Cache.get()
+        if (oldCache != MainViewModelInstance.state.value.cache)
+            toastMessage("Data cached")
     }
 }
 
