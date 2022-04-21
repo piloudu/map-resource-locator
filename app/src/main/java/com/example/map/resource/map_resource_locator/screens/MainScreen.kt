@@ -20,6 +20,8 @@ import com.example.map.resource.map_resource_locator.data_model.Resource
 import com.example.map.resource.map_resource_locator.ui.theme.Purple700
 import com.example.map.resource.map_resource_locator.utils.*
 import com.example.map.resource.map_resource_locator.view_model.AppState.*
+import com.example.map.resource.map_resource_locator.view_model.MainActivityState
+import com.example.map.resource.map_resource_locator.view_model.MainActivityUserIntent
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
 import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.CameraPosition
@@ -94,7 +96,11 @@ fun MainScreenMap(
                     context = MainActivity.getContext(),
                     position = position,
                     resource = it,
-                    iconResId = it.iconResId()
+                    iconResId = it.iconResId(),
+                    newCameraPosition = {
+                        cameraPositionState.position = focusMarker(position)
+                        true
+                    }
                 )
             }
         }
@@ -106,16 +112,27 @@ fun MapMarker(
     context: Context,
     position: LatLng,
     resource: Resource,
-    @DrawableRes iconResId: Int
+    @DrawableRes iconResId: Int,
+    newCameraPosition: () -> Boolean
 ) {
+    val state: MainActivityState by MainViewModelInstance.state.collectAsState()
+    val isSelected = state.selectedMarker == resource.id
     Marker(
         state = MarkerState(
             position = position
         ),
         title = resource.name ?: "",
-        icon = bitmapDescriptorFromVector(context, iconResId)
+        icon = if (!isSelected) bitmapDescriptorFromVector(context, iconResId) else null,
+        onClick = {
+            resource.id?.let {
+                MainViewModelInstance.sendIntent(MainActivityUserIntent.SelectMarker(it))
+            }
+            newCameraPosition()
+        }
     )
 }
+
+fun focusMarker(position: LatLng): CameraPosition = CameraPosition.fromLatLngZoom(position, 18f)
 
 @Composable
 fun LoadingIndicator(
