@@ -17,7 +17,6 @@ import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
 import com.example.map.resource.map_resource_locator.utils.lisbonLatLng
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
@@ -70,11 +69,11 @@ fun MainScreenMap(
         modifier = modifier.fillMaxSize(),
         cameraPositionState = cameraPositionState
     ) {
-        //if (appState.value.cache.resources.isNotEmpty())
-        Marker(
-            state = MarkerState(position = lisbonLatLng),
-            title = "Lisbon",
-            snippet = "Marker in Lisbon"
-        )
+        if (appState.value.cache.resources.isNotEmpty())
+            Marker(
+                state = MarkerState(position = lisbonLatLng),
+                title = "Lisbon",
+                snippet = "Marker in Lisbon"
+            )
     }
 }

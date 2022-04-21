@@ -11,7 +11,7 @@ import com.google.android.gms.maps.model.LatLng
 
 const val APP_NAME = "Map Resource Locator"
 
-const val defaultCameraZoom = 18f
+const val defaultCameraZoom = 13f
 val lisbonLatLng = LatLng(38.736946, -9.142685)
 val initialCameraPosition = CameraPosition.fromLatLngZoom(lisbonLatLng, defaultCameraZoom)
 
