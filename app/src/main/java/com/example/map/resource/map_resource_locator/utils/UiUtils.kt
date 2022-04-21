@@ -13,7 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.map.resource.map_resource_locator.data_model.Resource
-import kotlin.reflect.KProperty1
+import com.example.map.resource.map_resource_locator.ui.theme.Lavender
 import kotlin.reflect.full.memberProperties
 
 @Preview(showBackground = true)
@@ -35,17 +35,19 @@ fun PopupInfo(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(Color.White)
+            .background(Color.LightGray)
             .padding(16.dp)
     ) {
         val resourceProperties = resource::class.memberProperties
-        val nonNullProperties = resourceProperties.filterNot { it.getter.call(it) == null }
-        nonNullProperties.forEach {
-            val suffix = if (it.getter.returnType is Number) " uds" else ""
-            PopupInfoText(
-                key = it.name,
-                value = it.getter.call(it).toString() + suffix
-            )
+        val nonNullProperties = resourceProperties.filterNot { it.getter.call(resource) == null }
+        Column {
+            nonNullProperties.forEach {
+                val suffix = if (it.getter.returnType::javaClass == Int::class.java) " uds" else ""
+                PopupInfoText(
+                    key = it.name,
+                    value = it.getter.call(resource).toString() + suffix
+                )
+            }
         }
     }
 }
@@ -62,14 +64,14 @@ fun PopupInfoText(
         horizontalArrangement = Arrangement.Start
     ) {
         Text(
-            text = key,
+            text = "$key: ",
             fontWeight = FontWeight.Bold,
             color = Color.Black
         )
         Spacer(Modifier.width(8.dp))
         Text(
             text = value,
-            color = Color.Gray
+            color = Lavender
         )
     }
 }

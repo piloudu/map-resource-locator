@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,6 +41,8 @@ enum class MainScreenMessages(val message: String) {
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
     val state by MainViewModelInstance.state.collectAsState()
+    val selectedResource = state.selectedResource
+    val screenHeight = LocalConfiguration.current.screenHeightDp.dp
 
     Column(modifier.fillMaxSize()) {
         TopBar(
@@ -55,6 +58,15 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 resources = state.cache.resources
             )
         }
+    }
+    Column(Modifier.fillMaxHeight()) {
+        selectedResource?.let {
+            Spacer(modifier = Modifier.height((screenHeight * 3) / 4))
+            PopupInfo(
+                resource = it
+            )
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -115,7 +127,7 @@ fun MapMarker(
     newCameraPosition: () -> Boolean
 ) {
     val state: MainActivityState by MainViewModelInstance.state.collectAsState()
-    val isSelected = state.selectedResource == resource.id
+    val isSelected = state.selectedResource == resource
     Marker(
         state = MarkerState(
             position = position
@@ -123,9 +135,7 @@ fun MapMarker(
         title = resource.name ?: "",
         icon = if (!isSelected) bitmapDescriptorFromVector(context, iconResId) else null,
         onClick = {
-            resource.id?.let {
-                MainViewModelInstance.sendIntent(MainActivityUserIntent.SelectMarker(it))
-            }
+            MainViewModelInstance.sendIntent(MainActivityUserIntent.SelectMarker(resource))
             newCameraPosition()
         }
     )
