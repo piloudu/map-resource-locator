@@ -58,6 +58,7 @@ sealed class MainActivityUserIntent : UserIntent {
         MainViewModelInstance.state.value.cache = Cache.get()
         if (oldCache != MainViewModelInstance.state.value.cache)
             toastMessage("Data cached")
+        println("Cache: " + MainViewModelInstance.state.value.cache)
     }
 }
 
