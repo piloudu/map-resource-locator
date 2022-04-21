@@ -14,10 +14,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.map.resource.map_resource_locator.data_model.Resource
-import com.example.map.resource.map_resource_locator.get_data.Cache
 import com.example.map.resource.map_resource_locator.ui.theme.Purple700
 import com.example.map.resource.map_resource_locator.utils.APP_NAME
 import com.example.map.resource.map_resource_locator.utils.initialCameraPosition
+import com.example.map.resource.map_resource_locator.view_model.AppState.*
 import com.example.map.resource.map_resource_locator.view_model.MainViewModelInstance
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -25,7 +25,6 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import kotlinx.coroutines.runBlocking
 
 enum class MainScreenTags {
     TOPBAR, MAP
@@ -39,25 +38,19 @@ enum class MainScreenMessages(val message: String) {
 fun MainScreen(modifier: Modifier = Modifier) {
     val state by MainViewModelInstance.state.collectAsState()
 
-    /*
-     This should never exist in a UI element!!! I couldn't manage to find a way for a Composable
-     to subscribe to the changes made in state.cache after that coroutine ends.
-     */
-    runBlocking {
-        state.cache = Cache.get()
-    }
-
     Column(modifier.fillMaxSize()) {
         TopBar(
             modifier = Modifier
                 .testTag(MainScreenTags.TOPBAR.name)
                 .height(32.dp)
         )
-        if (state.cache.resources.isNotEmpty())
-            MainScreenMap(
+        when (state.innerState) {
+            LOADING -> LoadingIndicator()
+            else -> MainScreenMap(
                 cameraPosition = initialCameraPosition,
                 resources = state.cache.resources
             )
+        }
     }
 }
 
@@ -101,6 +94,20 @@ fun MainScreenMap(
             )
         }
     }
+}
+
+@Composable
+fun LoadingIndicator(
+    modifier: Modifier = Modifier,
+    size: Int = 80,
+    color: Color = Purple700
+) {
+    CircularProgressIndicator(
+        modifier = Modifier
+            .height(size.dp)
+            .width(size.dp),
+        color = color
+    )
 }
 
 @Preview

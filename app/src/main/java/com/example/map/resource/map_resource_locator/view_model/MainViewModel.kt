@@ -20,10 +20,20 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
 
     fun sendIntent(userIntent: MainActivityUserIntent) {
         viewModelScope.launch(Dispatchers.Default) {
-            userIntent.setStateCache()
+            setStateCache()
             userIntent.action()
         }
         reducer.sendIntent(userIntent)
+    }
+
+    private suspend fun setStateCache() {
+        val oldCache = MainViewModelInstance.state.value.cache
+        MainViewModelInstance.state.value.cache = Cache.get()
+        if (oldCache != MainViewModelInstance.state.value.cache)
+            viewModelScope.launch(Dispatchers.Main) {
+                toastMessage("Data cached")
+            }.invokeOnCompletion { sendIntent(MainActivityUserIntent.Logged) }
+        println("Cache: " + MainViewModelInstance.state.value.cache)
     }
 
     private class MainReducer(initialState: MainActivityState) :
@@ -31,6 +41,11 @@ abstract class MainViewModel : BaseViewModel<MainActivityState, MainActivityUser
         override fun reduce(oldState: MainActivityState, userIntent: MainActivityUserIntent) {
             when (userIntent) {
                 is MainActivityUserIntent.Login -> setState(
+                    oldState.copy(
+                        innerState = AppState.LOADING
+                    )
+                )
+                is MainActivityUserIntent.Logged -> setState(
                     oldState.copy(
                         innerState = AppState.MAIN
                     )
@@ -52,17 +67,8 @@ object MainViewModelInstance : MainViewModel()
 
 sealed class MainActivityUserIntent : UserIntent {
     object Login : MainActivityUserIntent()
+    object Logged : MainActivityUserIntent()
     class SelectMarker(val markerId: String) : MainActivityUserIntent()
-
-    suspend fun setStateCache() {
-        val oldCache = MainViewModelInstance.state.value.cache
-        MainViewModelInstance.state.value.cache = Cache.get()
-        if (oldCache != MainViewModelInstance.state.value.cache)
-            withContext(Dispatchers.Main) {
-                toastMessage("Data cached")
-            }
-        println("Cache: " + MainViewModelInstance.state.value.cache)
-    }
 }
 
 data class MainActivityState(
@@ -80,5 +86,5 @@ data class MainActivityState(
 }
 
 enum class AppState {
-    LOGIN, MAIN
+    LOGIN, LOADING, MAIN
 }
